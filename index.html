@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Institute ChatBot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Background Bubbles -->
+    <div class="bubble-container">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <div class="chatbot-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Institute ChatBot</h1>
+            <div class="header-controls">
+                <!-- Language Switcher -->
+                <div class="language-switcher">
+                    <label for="language-select">🌐 Language:</label>
+                    <select id="language-select">
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="hi">हिंदी</option>
+                    </select>
+                </div>
+
+                <!-- History Button -->
+                <button id="history-btn" class="history-btn" title="View Chat History">
+                    📜 History
+                </button>
+
+                <!-- Clear Button -->
+                <button id="clear-btn" class="clear-btn" title="Clear Chat">
+                    🗑️ Clear
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Area -->
+        <div id="chat-container" class="chat-container">
+            <div class="welcome-message">
+                <h2>Welcome to Institute ChatBot! 👋</h2>
+                <p>Ask me anything about the institute</p>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input 
+                type="text" 
+                id="user-input" 
+                class="user-input" 
+                placeholder="Ask your question here..."
+                autocomplete="off"
+            >
+            <button id="send-btn" class="send-btn">Send</button>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Chat History</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div id="history-list" class="history-list">
+                <p>No history yet</p>
+            </div>
+            <div class="modal-footer">
+                <button id="export-history-btn" class="export-btn">📥 Export History</button>
+                <button id="clear-history-btn" class="clear-history-btn">Delete All</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
