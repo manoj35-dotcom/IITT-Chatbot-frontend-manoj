@@ -4,6 +4,9 @@ import './App.css';
 import ChatContainer from './components/ChatContainer';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import HistoryModal from './components/HistoryModal';
+import PYQsBox from './components/PYQsBox';
+import TeacherFeedback from './components/TeacherFeedback';
+import TextToSpeech from './components/TextToSpeech';
 import { saveToLocalStorage, loadFromLocalStorage, deleteFromLocalStorage } from './utils/localStorage';
 import { sendMessage } from './utils/api';
 
@@ -21,6 +24,7 @@ function App() {
   const [showHistory, setShowHistory] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat');
   const chatEndRef = useRef(null);
 
   // Load messages from localStorage on mount
@@ -134,65 +138,108 @@ function App() {
       <div className="chatbot-container">
         {/* Header */}
         <div className="header">
-          <h1>Institute ChatBot</h1>
+          <h1>Institute Portal</h1>
           <div className="header-controls">
             <LanguageSwitcher 
               language={language} 
               onLanguageChange={setLanguage}
             />
-            <button 
-              className="history-btn" 
-              onClick={() => setShowHistory(true)}
-              title="View Chat History"
-            >
-              📜 History
-            </button>
-            <button 
-              className="clear-btn" 
-              onClick={handleClearChat}
-              title="Clear Chat"
-            >
-              🗑️ Clear
-            </button>
+            {activeTab === 'chat' && (
+              <>
+                <button 
+                  className="history-btn" 
+                  onClick={() => setShowHistory(true)}
+                  title="View Chat History"
+                >
+                  📜 History
+                </button>
+                <button 
+                  className="clear-btn" 
+                  onClick={handleClearChat}
+                  title="Clear Chat"
+                >
+                  🗑️ Clear
+                </button>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Chat Container */}
-        <ChatContainer 
-          messages={messages}
-          loading={loading}
-          language={language}
-          chatEndRef={chatEndRef}
-        />
-
-        {/* Input Area */}
-        <div className="input-area">
-          <input 
-            type="text" 
-            id="user-input"
-            className="user-input" 
-            placeholder={languages[language].placeholder}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter' && !loading) {
-                handleSendMessage(e.target.value);
-                e.target.value = '';
-              }
-            }}
-            disabled={loading}
-          />
+        {/* Tab Navigation */}
+        <div className="tab-navigation">
           <button 
-            className="send-btn"
-            onClick={(e) => {
-              const input = document.getElementById('user-input');
-              if (!loading) {
-                handleSendMessage(input.value);
-                input.value = '';
-              }
-            }}
-            disabled={loading}
+            className={`tab-btn ${activeTab === 'chat' ? 'active' : ''}`}
+            onClick={() => setActiveTab('chat')}
           >
-            {loading ? '⏳' : '📤'} {languages[language].send}
+            💬 ChatBot
           </button>
+          <button 
+            className={`tab-btn ${activeTab === 'pyqs' ? 'active' : ''}`}
+            onClick={() => setActiveTab('pyqs')}
+          >
+            📚 PYQs
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'feedback' ? 'active' : ''}`}
+            onClick={() => setActiveTab('feedback')}
+          >
+            👨‍🏫 Teacher Feedback
+          </button>
+          <button 
+            className={`tab-btn ${activeTab === 'tts' ? 'active' : ''}`}
+            onClick={() => setActiveTab('tts')}
+          >
+            🔊 Text to Speech
+          </button>
+        </div>
+
+        {/* Content Area */}
+        <div className="content-area">
+          {activeTab === 'chat' && (
+            <>
+              {/* Chat Container */}
+              <ChatContainer 
+                messages={messages}
+                loading={loading}
+                language={language}
+                chatEndRef={chatEndRef}
+              />
+
+              {/* Input Area */}
+              <div className="input-area">
+                <input 
+                  type="text" 
+                  id="user-input"
+                  className="user-input" 
+                  placeholder={languages[language].placeholder}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter' && !loading) {
+                      handleSendMessage(e.target.value);
+                      e.target.value = '';
+                    }
+                  }}
+                  disabled={loading}
+                />
+                <button 
+                  className="send-btn"
+                  onClick={(e) => {
+                    const input = document.getElementById('user-input');
+                    if (!loading) {
+                      handleSendMessage(input.value);
+                      input.value = '';
+                    }
+                  }}
+                  disabled={loading}
+                >
+                  {loading ? '⏳' : '📤'} {languages[language].send}
+                </button>
+              </div>
+            </>
+          )}
+
+          {activeTab === 'pyqs' && <PYQsBox />}
+          {activeTab === 'feedback' && <TeacherFeedback />}
+          {activeTab === 'tts' && <TextToSpeech />}
         </div>
       </div>
 
