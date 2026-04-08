@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Replace with your actual API endpoint
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 // Create an axios instance with default config
 const axiosInstance = axios.create({
@@ -9,24 +9,23 @@ const axiosInstance = axios.create({
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
+    ...(process.env.REACT_APP_API_KEY ? { Authorization: `Bearer ${process.env.REACT_APP_API_KEY}` } : {}),
   },
 });
 
 /**
  * Send a message to the chatbot API
  * @param {string} message - The user message
- * @param {string} language - The selected language code
  * @returns {Promise<string>} - The bot's response
  */
-export const sendMessage = async (message, language = 'en') => {
+export const sendMessage = async (message) => {
   try {
     const response = await axiosInstance.post('/chat', {
-      message,
-      language,
+      question: message,
     });
 
-    // Assuming your API returns { response: "message text" }
-    return response.data.response || response.data.message || 'I could not process your request.';
+    // Your FastAPI returns { response: "...", status: "success" }
+    return response.data.response || 'I could not process your request.';
   } catch (error) {
     console.error('API Error:', error);
     
