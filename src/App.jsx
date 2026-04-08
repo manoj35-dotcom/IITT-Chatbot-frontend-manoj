@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import ChatContainer from './components/ChatContainer';
-import { saveToLocalStorage, loadFromLocalStorage, deleteFromLocalStorage } from './utils/localStorage';
+import { saveToLocalStorage, loadFromLocalStorage } from './utils/localStorage';
 import { sendMessage } from './utils/api';
 
 function App() {
@@ -67,11 +67,6 @@ function App() {
     }
   };
 
-  const handleClearChat = () => {
-    setMessages([]);
-    deleteFromLocalStorage('chatMessages');
-  };
-
   return (
     <div className="app">
       {/* Animated Background Bubbles */}
@@ -85,15 +80,6 @@ function App() {
         {/* Header */}
         <div className="header">
           <h1>Institute ChatBot</h1>
-          <div className="header-controls">
-            <button 
-              className="clear-btn" 
-              onClick={handleClearChat}
-              title="Clear Chat"
-            >
-              🗑️ Clear
-            </button>
-          </div>
         </div>
 
         {/* Chat Container */}
