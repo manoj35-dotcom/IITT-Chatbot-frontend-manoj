@@ -42,18 +42,30 @@ function App() {
     setLoading(true);
 
     try {
-      // Replace with your actual API endpoint
-      const response = await sendMessage(userMessage);
-      
+      // Call API with success code checking
+      const apiResponse = await sendMessage(userMessage);
+
+      let botMessageText;
+      if (apiResponse.success) {
+        // Success: use the response data
+        botMessageText = apiResponse.data;
+        console.log(`✅ API Success: ${apiResponse.status} - ${apiResponse.message}`);
+      } else {
+        // API returned error status
+        botMessageText = `❌ API Error (${apiResponse.status}): ${apiResponse.message}`;
+        console.error(`API Error: ${apiResponse.status} - ${apiResponse.message}`);
+      }
+
       const botMessage = {
         id: Date.now() + 1,
-        text: response,
+        text: botMessageText,
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString()
       };
 
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
+      // Network or unexpected errors
       const errorMessage = {
         id: Date.now() + 1,
         text: 'Sorry, I could not process your request. Please try again.',
